@@ -23,7 +23,7 @@ Uzbek Cyrillic ⇄ Latin transliteration package for Laravel.
 
 ## Requirements
 
-- PHP 8.1+ (the converter core is PHP 8.1 compatible; Laravel 12 itself requires PHP ≥ 8.2)
+- PHP 8.3+
 - Laravel 12 or 13
 
 ## Installation

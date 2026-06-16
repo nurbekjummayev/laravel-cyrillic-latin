@@ -13,16 +13,19 @@ namespace NurbekJummayev\LaravelCyrillicLatin\Support;
 final class Dictionary
 {
     /** @var array<string, string> normalized word => replacement */
-    private array $words = [];
+    private readonly array $words;
 
     /**
      * @param  array<string, string>  $words
      */
     public function __construct(array $words = [])
     {
+        $normalized = [];
         foreach ($words as $source => $replacement) {
-            $this->words[self::normalize((string) $source)] = (string) $replacement;
+            $normalized[self::normalize((string) $source)] = (string) $replacement;
         }
+
+        $this->words = $normalized;
     }
 
     public function lookup(string $word): ?string
