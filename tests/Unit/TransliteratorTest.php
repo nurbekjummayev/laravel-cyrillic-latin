@@ -256,6 +256,37 @@ class TransliteratorTest extends TestCase
         $this->assertSame('Салом', $this->transliterator->convert('Salom', 'cyrillic'));
     }
 
+    public function test_convert_defaults_to_latin(): void
+    {
+        $this->assertSame('Salom', $this->transliterator->convert('Салом'));
+    }
+
+    /** @return array<string, array{string, string, string}> */
+    public static function convertAliasProvider(): array
+    {
+        return [
+            'latin alias lat' => ['Салом', 'lat', 'Salom'],
+            'latin alias uz' => ['Салом', 'uz', 'Salom'],
+            'cyrillic alias cyr' => ['Salom', 'cyr', 'Салом'],
+            'cyrillic alias kr' => ['Salom', 'kr', 'Салом'],
+        ];
+    }
+
+    #[DataProvider('convertAliasProvider')]
+    public function test_convert_accepts_script_aliases(string $input, string $to, string $expected): void
+    {
+        $this->assertSame($expected, $this->transliterator->convert($input, $to));
+    }
+
+    public function test_converts_multiline_paragraph(): void
+    {
+        $cyrillic = "Тошкент — Ўзбекистон пойтахти.\nБу шаҳарда 2,5 миллион киши яшайди.";
+        $latin = "Toshkent — O‘zbekiston poytaxti.\nBu shaharda 2,5 million kishi yashaydi.";
+
+        $this->assertSame($latin, $this->transliterator->toLatin($cyrillic));
+        $this->assertSame($cyrillic, $this->transliterator->toCyrillic($latin));
+    }
+
     public function test_convert_with_unknown_target_throws(): void
     {
         $this->expectException(\InvalidArgumentException::class);
